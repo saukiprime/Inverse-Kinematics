@@ -34,5 +34,5 @@ Here, `arm` is initialized with a list of each link in the robot, `angles` is an
 To run the program, navigate to the project directory and run the `main.py` file:
 
 ```bash
-python robot.py
+python main.py
 ```

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot
 import scipy.optimize
 
-# from optimizer import levenberg_marquardt
+from optimizer import trust_region
 
 class Link():
 
@@ -65,15 +65,15 @@ class Robot:
             return current_matrix
 
     def inverse_kinematics(self, target_position):
-        initial_position = np.array([0, 0, 0] * len(self.links))
+        initial_position = np.array([0.0, 0.0, 0.0] * len(self.links))
 
         def optimize_function(x):
             fk = self.forward_kinematics(x)
             target_error = (fk[:3, -1] - target_position)
-            return target_error
+            return np.linalg.norm(target_error)
 
-        res = scipy.optimize.least_squares(optimize_function, initial_position).x
-        # res = levenberg_marquardt(optimize_function, initial_position)[0]
+        # res = scipy.optimize.least_squares(optimize_function, initial_position, method="lm").x
+        res = trust_region(optimize_function, initial_position)
 
         return res.reshape(-1, 3)
 
